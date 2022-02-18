@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Опросник</string>
+    <string name="question_russia">Москва столица России</string>
+    <string name="true_button">Да</string>
+    <string name="false_button">Нет</string>
+    <string name="correct_toast">Правильно!</string>
+    <string name="incorrect_toast">Не правильно!</string>
+    <string name="next_button">Следующий</string>
+    <string name="back_button">Предыдущий</string>
+    <string name="question_baikal">Байкал самое глубокое озеро мира</string>
+    <string name="question_babamasha">Баба Маша любит детей</string>
+    <string name="question_usa">Нью Йорк столица США</string>
+    <string name="name_france">Париж столица Франции</string>
+</resources>

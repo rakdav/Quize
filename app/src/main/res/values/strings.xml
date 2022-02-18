@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Quiz</string>
+    <string name="question_russia">Moscow is a capital of Russia</string>
+    <string name="true_button">True</string>
+    <string name="false_button">False</string>
+    <string name="correct_toast">Correct!</string>
+    <string name="incorrect_toast">Incorrect!</string>
+    <string name="next_button">Next</string>
+    <string name="back_button">Back</string>
+    <string name="question_baikal">Baikal is deepest lake of the world</string>
+    <string name="question_babamasha">Baba Masha loves children</string>
+    <string name="question_usa">New York is capital of USA</string>
+    <string name="name_france">Paris is a capital of France</string>
+</resources>
