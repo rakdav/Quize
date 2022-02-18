@@ -9,6 +9,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 
 class MainActivity : AppCompatActivity() {
     private val TAG="MainActivity"
@@ -18,21 +21,23 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextview:TextView
     private lateinit var nextButton: ImageButton
     private lateinit var backButton:ImageButton
-    private var count:Int=0
-    private val questionBank= listOf(
-            Question(R.string.question_russia,true),
-            Question(R.string.name_france,true),
-            Question(R.string.question_babamasha,false),
-            Question(R.string.question_baikal,true),
-            Question(R.string.question_usa,false)
-    )
-    private var currentIndex=0
+//    private var count:Int=0
+//    private val questionBank= listOf(
+//            Question(R.string.question_russia,true),
+//            Question(R.string.name_france,true),
+//            Question(R.string.question_babamasha,false),
+//            Question(R.string.question_baikal,true),
+//            Question(R.string.question_usa,false)
+//    )
+//    private var currentIndex=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
        // Toast.makeText(this,"OnCreate",Toast.LENGTH_LONG).show()
         Log.i(TAG,"OnCreate")
         setTitle(R.string.app_name)
+        val provider:ViewModelProvider=ViewModelProvider(this)
+        val quizViewModel=provider.get(QuizViewModel::class.java)
         trueButton=findViewById(R.id.true_button)
         falseButton=findViewById(R.id.false_button)
         questionTextview=findViewById(R.id.question_text_view)
