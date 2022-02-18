@@ -2,6 +2,7 @@ package com.example.quize
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 class MainActivity : AppCompatActivity() {
     private val TAG="MainActivity"
     private val COUNT="Count"
+    private val KEY_INDEX="index"
     private lateinit var trueButton:Button
     private lateinit var falseButton: Button
     private lateinit var questionTextview:TextView
@@ -30,14 +32,19 @@ class MainActivity : AppCompatActivity() {
 //            Question(R.string.question_usa,false)
 //    )
 //    private var currentIndex=0
+    private val quizViewModel:QuizViewModel by lazy{
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val currentIndex=savedInstanceState?.getInt(KEY_INDEX,0)?:0
+        quizViewModel.currentIndex=currentIndex
        // Toast.makeText(this,"OnCreate",Toast.LENGTH_LONG).show()
         Log.i(TAG,"OnCreate")
         setTitle(R.string.app_name)
-        val provider:ViewModelProvider=ViewModelProvider(this)
-        val quizViewModel=provider.get(QuizViewModel::class.java)
+//        val provider:ViewModelProvider=ViewModelProvider(this)
+//        val quizViewModel=provider.get(QuizViewModel::class.java)
         trueButton=findViewById(R.id.true_button)
         falseButton=findViewById(R.id.false_button)
         questionTextview=findViewById(R.id.question_text_view)
@@ -52,23 +59,25 @@ class MainActivity : AppCompatActivity() {
         }
         nextButton.setOnClickListener{view:View->
             backButton.isEnabled=true
-            if(currentIndex==questionBank.size-1)
+            if(quizViewModel.currentIndex==quizViewModel.questionBank.size-1)
             {
                 nextButton.isEnabled=false;
             }
             else {
-                currentIndex = (currentIndex + 1) % questionBank.size
+//                currentIndex = (currentIndex + 1) % questionBank.size
+                quizViewModel.moveToNext()
                 updateQuestion()
             }
         }
         backButton.setOnClickListener { view:View->
             nextButton.isEnabled=true
-            if(currentIndex==0)
+            if(quizViewModel.currentIndex==0)
             {
                 backButton.isEnabled=false;
             }
             else {
-                currentIndex = (currentIndex - 1) % questionBank.size
+//                quizViewModel.currentIndex = (quizViewModel.currentIndex - 1) % quizViewModel.questionBank.size
+                quizViewModel.moveToBack()
                 updateQuestion()
             }
         }
@@ -76,11 +85,13 @@ class MainActivity : AppCompatActivity() {
     }
     private fun updateQuestion()
     {
-        val questionTextResId=questionBank[currentIndex].textResId
+       // val questionTextResId=questionBank[currentIndex].textResId
+        val questionTextResId=quizViewModel.currentQuestiontext
         questionTextview.setText(questionTextResId)
     }
     private fun checkAnswer(userAnswer:Boolean){
-        val correctAnswer=questionBank[currentIndex].answer
+//        val correctAnswer=questionBank[currentIndex].answer
+        val correctAnswer=quizViewModel.currentQuestionAnswer
         val messageResId= if (userAnswer==correctAnswer)
         {
             R.string.correct_toast
@@ -90,14 +101,19 @@ class MainActivity : AppCompatActivity() {
             R.string.incorrect_toast
         }
         Toast.makeText(this,messageResId,Toast.LENGTH_LONG).show()
-        if(userAnswer==correctAnswer) count++;
-        Log.d(COUNT,count.toString())
-        if(currentIndex==questionBank.size-1)
+        if(userAnswer==correctAnswer) quizViewModel.count++;
+        Log.d(COUNT,quizViewModel.count.toString())
+        if(quizViewModel.currentIndex==quizViewModel.questionBank.size-1)
         {
-            var ball:Int=count*100/questionBank.size
+            var ball:Int=quizViewModel.count*100/quizViewModel.questionBank.size
             Toast.makeText(this,resources.getText(R.string.procent).toString()+ball+"%",
                 Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.putInt(KEY_INDEX,quizViewModel.currentIndex)
     }
 
     override fun onStart() {
