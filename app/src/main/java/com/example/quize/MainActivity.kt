@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
        // Toast.makeText(this,"OnCreate",Toast.LENGTH_LONG).show()
         Log.i(TAG,"OnCreate")
+        Log.d(COUNT,quizViewModel.count.toString())
         setTitle(R.string.app_name)
         trueButton=findViewById(R.id.true_button)
         falseButton=findViewById(R.id.false_button)
