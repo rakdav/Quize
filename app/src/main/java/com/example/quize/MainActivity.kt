@@ -1,5 +1,6 @@
 package com.example.quize
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextview:TextView
     private lateinit var nextButton: ImageButton
     private lateinit var backButton:ImageButton
+    private lateinit var cheatButton:Button
 //    private var count:Int=0
 //    private val questionBank= listOf(
 //            Question(R.string.question_russia,true),
@@ -47,7 +49,15 @@ class MainActivity : AppCompatActivity() {
         questionTextview=findViewById(R.id.question_text_view)
         nextButton=findViewById(R.id.next_button)
         backButton=findViewById(R.id.back_button)
+        cheatButton=findViewById(R.id.cheat_button)
         updateQuestion()
+        cheatButton.setOnClickListener {view:View->
+//            val intent=Intent(this,CheatActivity::class.java)
+            val  answerIsTrue=quizViewModel.currentQuestionAnswer
+            val answer=quizViewModel.currentQuestiontext
+            val  intent=CheatActivity.newIntent(this@MainActivity,answerIsTrue,answer)
+            startActivity(intent)
+        }
         trueButton.setOnClickListener{view:View->
             checkAnswer(true)
         }
