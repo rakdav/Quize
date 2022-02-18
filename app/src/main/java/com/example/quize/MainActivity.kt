@@ -38,13 +38,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val currentIndex=savedInstanceState?.getInt(KEY_INDEX,0)?:0
-        quizViewModel.currentIndex=currentIndex
        // Toast.makeText(this,"OnCreate",Toast.LENGTH_LONG).show()
         Log.i(TAG,"OnCreate")
         setTitle(R.string.app_name)
-//        val provider:ViewModelProvider=ViewModelProvider(this)
-//        val quizViewModel=provider.get(QuizViewModel::class.java)
         trueButton=findViewById(R.id.true_button)
         falseButton=findViewById(R.id.false_button)
         questionTextview=findViewById(R.id.question_text_view)
@@ -109,11 +105,6 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,resources.getText(R.string.procent).toString()+ball+"%",
                 Toast.LENGTH_LONG).show()
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-        super.onSaveInstanceState(outState, outPersistentState)
-        outState.putInt(KEY_INDEX,quizViewModel.currentIndex)
     }
 
     override fun onStart() {
