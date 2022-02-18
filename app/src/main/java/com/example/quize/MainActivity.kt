@@ -12,6 +12,7 @@ import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     private val TAG="MainActivity"
+    private val COUNT="Count"
     private lateinit var trueButton:Button
     private lateinit var falseButton: Button
     private lateinit var questionTextview:TextView
@@ -78,19 +79,20 @@ class MainActivity : AppCompatActivity() {
         val messageResId= if (userAnswer==correctAnswer)
         {
             R.string.correct_toast
-            count++
         }
         else
         {
             R.string.incorrect_toast
         }
+        Toast.makeText(this,messageResId,Toast.LENGTH_LONG).show()
+        if(userAnswer==correctAnswer) count++;
+        Log.d(COUNT,count.toString())
         if(currentIndex==questionBank.size-1)
         {
             var ball:Int=count*100/questionBank.size
             Toast.makeText(this,resources.getText(R.string.procent).toString()+ball+"%",
                 Toast.LENGTH_LONG).show()
         }
-        Toast.makeText(this,messageResId,Toast.LENGTH_LONG).show()
     }
 
     override fun onStart() {
