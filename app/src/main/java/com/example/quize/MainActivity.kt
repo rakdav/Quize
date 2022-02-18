@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var questionTextview:TextView
     private lateinit var nextButton: ImageButton
     private lateinit var backButton:ImageButton
+    private var count:Int=0
     private val questionBank= listOf(
             Question(R.string.question_russia,true),
             Question(R.string.name_france,true),
@@ -77,10 +78,17 @@ class MainActivity : AppCompatActivity() {
         val messageResId= if (userAnswer==correctAnswer)
         {
             R.string.correct_toast
+            count++
         }
         else
         {
             R.string.incorrect_toast
+        }
+        if(currentIndex==questionBank.size-1)
+        {
+            var ball:Int=count*100/questionBank.size
+            Toast.makeText(this,resources.getText(R.string.procent).toString()+ball+"%",
+                Toast.LENGTH_LONG).show()
         }
         Toast.makeText(this,messageResId,Toast.LENGTH_LONG).show()
     }
