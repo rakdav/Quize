@@ -20,6 +20,7 @@ class QuizViewModel: ViewModel() {
             Question(R.string.question_usa,false)
         )
     var count=0
+    var isCheater=false
     val currentQuestionAnswer:Boolean
     get() = questionBank[currentIndex].answer
     val currentQuestiontext:Int

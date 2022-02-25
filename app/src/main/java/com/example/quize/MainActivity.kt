@@ -1,5 +1,6 @@
 package com.example.quize
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,10 +16,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 
+private const val TAG="MainActivity"
+private const val COUNT="Count"
+private const val KEY_INDEX="index"
+private const val REQUEST_CODE_CHEAT=0
 class MainActivity : AppCompatActivity() {
-    private val TAG="MainActivity"
-    private val COUNT="Count"
-    private val KEY_INDEX="index"
+
     private lateinit var trueButton:Button
     private lateinit var falseButton: Button
     private lateinit var questionTextview:TextView
@@ -56,7 +59,8 @@ class MainActivity : AppCompatActivity() {
             val  answerIsTrue=quizViewModel.currentQuestionAnswer
             val answer=quizViewModel.currentQuestiontext
             val  intent=CheatActivity.newIntent(this@MainActivity,answerIsTrue,answer)
-            startActivity(intent)
+//            startActivity(intent)
+            startActivityForResult(intent, REQUEST_CODE_CHEAT)
         }
         trueButton.setOnClickListener{view:View->
             checkAnswer(true)
@@ -90,23 +94,34 @@ class MainActivity : AppCompatActivity() {
         }
         backButton.isEnabled=false;
     }
+
+
     private fun updateQuestion()
     {
        // val questionTextResId=questionBank[currentIndex].textResId
         val questionTextResId=quizViewModel.currentQuestiontext
         questionTextview.setText(questionTextResId)
     }
+
+
     private fun checkAnswer(userAnswer:Boolean){
 //        val correctAnswer=questionBank[currentIndex].answer
         val correctAnswer=quizViewModel.currentQuestionAnswer
-        val messageResId= if (userAnswer==correctAnswer)
+//        val messageResId= if (userAnswer==correctAnswer)
+//        {
+//            R.string.correct_toast
+//        }
+//        else
+//        {
+//            R.string.incorrect_toast
+//        }
+        val  messageResId=when
         {
-            R.string.correct_toast
+            quizViewModel.isCheater->R.string.judgment_toast
+            userAnswer==correctAnswer->R.string.correct_toast
+                        else->R.string.incorrect_toast
         }
-        else
-        {
-            R.string.incorrect_toast
-        }
+        Log.d(KEY_INDEX,quizViewModel.isCheater.toString())
         Toast.makeText(this,messageResId,Toast.LENGTH_LONG).show()
         if(userAnswer==correctAnswer) quizViewModel.count++;
         Log.d(COUNT,quizViewModel.count.toString())
@@ -115,6 +130,18 @@ class MainActivity : AppCompatActivity() {
             var ball:Int=quizViewModel.count*100/quizViewModel.questionBank.size
             Toast.makeText(this,resources.getText(R.string.procent).toString()+ball+"%",
                 Toast.LENGTH_LONG).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode!= Activity.RESULT_OK)
+        {
+            return
+        }
+        if(requestCode == REQUEST_CODE_CHEAT)
+        {
+            quizViewModel.isCheater=data?.getBooleanExtra(EXTRA_ANSWER_SHOW,false)?:false
         }
     }
 
